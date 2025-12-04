@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carlsberg Excellence - Warehouse Assessment</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+
+            --color-bg-1: rgba(59, 130, 246, 0.08);
+            --color-bg-2: rgba(245, 158, 11, 0.08);
+            --color-bg-3: rgba(34, 197, 94, 0.08);
+            --color-bg-4: rgba(239, 68, 68, 0.08);
+
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        }
+
+        * { box-sizing: border-box; }
+        html { font-size: var(--font-size-base); font-family: var(--font-family-base); }
+        body { margin: 0; padding: 0; background: var(--color-background); color: var(--color-text); }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-teal-500) 0%, var(--color-teal-600) 100%);
+            color: white;
+            padding: var(--space-32);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 { margin: 0; font-size: var(--font-size-3xl); font-weight: 600; }
+        .header p { margin: var(--space-8) 0 0; font-size: var(--font-size-lg); opacity: 0.95; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-24);
+        }
+
+        .score-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-20);
+            margin-bottom: var(--space-20);
+            box-shadow: var(--shadow-md);
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-20);
+            flex-wrap: wrap;
+            gap: var(--space-16);
+        }
+
+        .score-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--color-red-500) 0%, var(--color-red-400) 100%);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pillar { margin-top: var(--space-24); }
+        .pillar-title { font-size: var(--font-size-xl); font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-12); }
+
+        .finding {
+            background: var(--color-bg-4);
+            border-left: 4px solid var(--color-red-500);
+            padding: var(--space-16);
+            margin-bottom: var(--space-12);
+            border-radius: var(--radius-base);
+        }
+
+        .finding-category {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: var(--space-8);
+        }
+
+        .finding-detail {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+        }
+
+        .finding-list {
+            list-style: none;
+            padding-left: 0;
+            margin: var(--space-8) 0;
+        }
+
+        .finding-list li {
+            padding-left: var(--space-20);
+            margin-bottom: var(--space-8);
+            position: relative;
+        }
+
+        .finding-list li:before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            color: var(--color-red-500);
+            font-weight: 600;
+        }
+
+        .action-box {
+            background: var(--color-bg-1);
+            border-left: 4px solid var(--color-teal-500);
+            padding: var(--space-16);
+            margin-top: var(--space-16);
+            border-radius: var(--radius-base);
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+        }
+
+        .action-items {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .action-items li {
+            padding-left: var(--space-20);
+            margin-bottom: var(--space-8);
+            position: relative;
+            font-size: var(--font-size-sm);
+        }
+
+        .action-items li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+        }
+
+        .tabs {
+            display: flex;
+            gap: var(--space-12);
+            margin-bottom: var(--space-20);
+            border-bottom: 2px solid var(--color-border);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: var(--space-12) var(--space-16);
+            border: none;
+            background: transparent;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-16);
+            margin: var(--space-16) 0;
+        }
+
+        .kpi-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-base);
+            padding: var(--space-16);
+        }
+
+        .kpi-label { font-size: var(--font-size-sm); color: var(--color-text-secondary); font-weight: 500; }
+        .kpi-value { font-size: var(--font-size-2xl); font-weight: 600; margin: var(--space-8) 0; }
+
+        .status-emerging { color: var(--color-red-500); }
+        .status-positive { color: var(--color-teal-500); }
+
+        @media (max-width: 768px) {
+            .container { padding: var(--space-16); }
+            .header { padding: var(--space-20); }
+            .header h1 { font-size: var(--font-size-2xl); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Carlsberg Excellence - Warehouse</h1>
+        <p>Kylemore Baseline Maturity Assessment | October 2025</p>
+    </div>
+
+    <div class="container">
+        <!-- Overall Score -->
+        <div class="score-card">
+            <div class="score-header">
+                <div class="score-title">Overall Assessment</div>
+                <div class="score-badge">3%</div>
+            </div>
+            <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--font-size-base);">
+                Current maturity score indicates emerging level across most CarlEx foundations. Focus areas require targeted improvement planning and execution.
+            </p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('zone-management')">Zone Management</button>
+            <button class="tab-btn" onclick="switchTab('performance')">Performance Management</button>
+            <button class="tab-btn" onclick="switchTab('organizational')">Organizational Management</button>
+        </div>
+
+        <!-- Zone Management Tab -->
+        <div id="zone-management" class="tab-content active">
+            <div class="score-card">
+                <div class="score-header">
+                    <div class="score-title">Zone Management</div>
+                    <div style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--color-red-500);">Score: 1</div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Workplace Standardization (5S)</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Zone Mapping</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Priority Zones Identified</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Sort (Material Removal)</div>
+                            <div class="kpi-value status-positive">✓ YES</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Set in Order</div>
+                            <div class="kpi-value status-positive">✓ YES</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Key Findings:</div>
+                        <ul class="finding-list">
+                            <li>No formal map of warehouse with clear zone responsibility</li>
+                            <li>Priority zones not defined based on safety and quality impact</li>
+                            <li>No visual evidence of zone boundaries and ownership</li>
+                            <li>Shadow boards not present for all tools and equipment</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Create warehouse zone map with clear ownership assignments</li>
+                            <li>Identify 3-5 priority zones based on safety and quality criticality</li>
+                            <li>Implement visual management (signage, shadow boards, floor markings)</li>
+                            <li>Assign zone owners with defined responsibilities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Workflow Standardization</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Workflow List & Ownership</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Priority Workflows Identified</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Current State Mapped</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Key Workflows</div>
+                            <div class="kpi-value status-positive">✓ EXISTS</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Key Findings:</div>
+                        <div class="finding-detail">Score: 0 - No Evidence</div>
+                        <ul class="finding-list">
+                            <li>No formal list of workflows with clear responsibility</li>
+                            <li>Priority workflows not identified from list (Pallet Pickup, Stock Allotment, Quarantine, Changeover, Material Handling)</li>
+                            <li>Current state of priority workflows not formally mapped</li>
+                            <li>No process charts or visual flow documentation</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Document all warehouse workflows with ownership</li>
+                            <li>Map current state of critical workflows (Pallet Operations, Stock Management, Quarantine)</li>
+                            <li>Create process flow charts for each priority workflow</li>
+                            <li>Define steps and responsibilities for each workflow</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Standard Documents & Visual Standards</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">SOPs Documented</div>
+                            <div class="kpi-value status-emerging">✗ Out of Date</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Document Ownership Clear</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Visual Standards Displayed</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Abnormality System</div>
+                            <div class="kpi-value status-emerging">▲ Partial</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Standard Documents Score: 0 - No Evidence</div>
+                        <ul class="finding-list">
+                            <li>SOPs for Quarantine, Stock Deployment, Pallet Scanning, Rework are out of date</li>
+                            <li>No clear ownership assigned to each SOP</li>
+                            <li>Documents not actively used in operations</li>
+                            <li>Lack of visual management implementation (KPIs, Safety, Losses not displayed)</li>
+                        </ul>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Abnormality Reporting Score: 0 - No Evidence (Partial)</div>
+                        <ul class="finding-list">
+                            <li>M1 and M3 SAP systems partially in place</li>
+                            <li>Ownership of process steps not clear</li>
+                            <li>No awareness of abnormality reporting process (recorded in Excel/SAP)</li>
+                            <li>Systems operators aware of reported abnormalities but process not standardized</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Update all SOPs with current standards and assign clear owners</li>
+                            <li>Implement visual display of KPIs, losses, and safety symbols</li>
+                            <li>Create visual boundaries for material and equipment storage</li>
+                            <li>Standardize abnormality reporting process with clear escalation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Management Tab -->
+        <div id="performance" class="tab-content">
+            <div class="score-card">
+                <div class="score-header">
+                    <div class="score-title">Performance Management</div>
+                    <div style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--color-red-500);">Score: 0</div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Priorities Deployment (9-Grid)</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Market 9-Grid Defined</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Site Priorities Deployed</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Department Awareness</div>
+                            <div class="kpi-value status-emerging">✗ NOT CLEAR</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">KPIs Cascaded</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Key Findings:</div>
+                        <ul class="finding-list">
+                            <li>9-Grid not cascaded at executive level</li>
+                            <li>Site-level annual priorities not defined aligned to Britvic 9-Grid</li>
+                            <li>Department leaders not aware of site priorities</li>
+                            <li>Warehouse KPIs not cascaded (Service Levels, LTA, OEE Impact not deployed)</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Align site priorities to Britvic Ireland 9-Grid</li>
+                            <li>Deploy service level, LTA, and OEE KPIs to warehouse</li>
+                            <li>Set annual targets for each warehouse KPI</li>
+                            <li>Communicate priorities to all department leaders</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Performance Management System (PMS)</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">PMS Meetings in Place</div>
+                            <div class="kpi-value status-emerging">▲ Partial</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">KPIs Appropriate & Aligned</div>
+                            <div class="kpi-value status-emerging">✗ Service Level Only</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Participants & Roles Clear</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Engagement & Contribution</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Key Findings:</div>
+                        <ul class="finding-list">
+                            <li>PMS meetings exist but not with fully proactive approach</li>
+                            <li>Only Service Level KPI discussed (limited scope)</li>
+                            <li>Meetings not fully aligned with business priorities</li>
+                            <li>Participants, agendas, and ground rules not clearly defined</li>
+                            <li>Limited understanding of roles among participants</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Establish PMS 2, 3, 4 meeting structure with clear cadence</li>
+                            <li>Define participants, roles, and responsibilities for each level</li>
+                            <li>Expand KPIs beyond service level (Cost, Quality, Safety, OEE)</li>
+                            <li>Set meeting agendas and ground rules</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Gemba Kaizen & Problem Solving</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Gemba Kaizen Process</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Problem Solving Capability</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">RCA Training</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Triggers Defined</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Key Findings:</div>
+                        <ul class="finding-list">
+                            <li>No structured Gemba Kaizen process in place</li>
+                            <li>Employees unaware of how to contribute with ideas</li>
+                            <li>Basic problem-solving capability not established</li>
+                            <li>No triggers defined for when to apply Root Cause Analysis (RCA)</li>
+                            <li>No regular reviews of problem-solving initiatives</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Establish structured Gemba Kaizen workflow process</li>
+                            <li>Train warehouse managers on RCA and basic problem-solving</li>
+                            <li>Define triggers for RCA (Safety incidents, Quality, Downtime > X duration)</li>
+                            <li>Create improvement idea submission system</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organizational Management Tab -->
+        <div id="organizational" class="tab-content">
+            <div class="score-card">
+                <div class="score-header">
+                    <div class="score-title">Organizational Management</div>
+                    <div style="font-size: var(--font-size-2xl); font-weight: 600; color: var(--color-red-500);">Score: 0</div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Organizational Setup</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Archetype Benchmarking</div>
+                            <div class="kpi-value status-emerging">▲ In Progress</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Targeted Structure</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Job Descriptions</div>
+                            <div class="kpi-value status-positive">✓ YES</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Key Findings:</div>
+                        <ul class="finding-list">
+                            <li>Warehouse structure not formally benchmarked against archetypes</li>
+                            <li>No targeted structure defined to address gaps</li>
+                            <li>Job descriptions exist but may not reflect current structure</li>
+                            <li>Opportunity for organizational optimization vs. performance benchmarks</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Benchmark warehouse structure against CarlEx archetypes</li>
+                            <li>Define targeted structure aligned to productivity benchmarks</li>
+                            <li>Update job descriptions to reflect new structure</li>
+                            <li>Assess capability gaps vs. role requirements</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Capability Development</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Skill Matrices in Place</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Development Plans</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Onboarding Program</div>
+                            <div class="kpi-value status-positive">✓ YES</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">70/20/10 Applied</div>
+                            <div class="kpi-value status-emerging">▲ Partial</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Skill Matrices Score: 0 - No Evidence</div>
+                        <ul class="finding-list">
+                            <li>No skill matrices developed for warehouse roles</li>
+                            <li>Skill levels not aligned to T-level functional capabilities</li>
+                            <li>Skill gaps not prioritized based on losses</li>
+                            <li>Only mandatory training tracked, not comprehensive skill development</li>
+                        </ul>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Training Practices Score: 1 - Emerging</div>
+                        <ul class="finding-list">
+                            <li>Knowledge sharing through toolbox talks and OPLs is ad hoc</li>
+                            <li>Onboarding program exists but not fully comprehensive</li>
+                            <li>70/20/10 learning principle partially applied</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Create skill matrices with T-level (0-4) capability definitions</li>
+                            <li>Conduct skill gap analysis for all warehouse roles</li>
+                            <li>Develop Individual Development Plans (IDPs) for key roles</li>
+                            <li>Implement structured knowledge sharing (daily toolbox talks, One-Point Lessons)</li>
+                            <li>Strengthen 70/20/10 learning balance in all training</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-title">Leadership Expectations</div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-label">Growth Culture Awareness</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Gemba Leadership Guideline</div>
+                            <div class="kpi-value status-emerging">✗ NO</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">Gemba Walks Performed</div>
+                            <div class="kpi-value status-emerging">▲ Ad Hoc</div>
+                        </div>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Gemba Leadership Score: 0 - No Evidence</div>
+                        <ul class="finding-list">
+                            <li>Warehouse manager and logistics head not trained on Growth Culture Principles</li>
+                            <li>No Gemba Leadership Guideline self-assessments conducted</li>
+                            <li>Leadership capability gaps not prioritized in development plans</li>
+                        </ul>
+                    </div>
+                    <div class="finding">
+                        <div class="finding-category">Gemba Walks Score: 0 - No Evidence</div>
+                        <ul class="finding-list">
+                            <li>Gemba walks are ad hoc and audit-focused (Safety &amp; Quality)</li>
+                            <li>Not linked to current priorities or PMS meetings</li>
+                            <li>Not based on strategic performance improvement areas</li>
+                            <li>Missing focus on daily operational excellence</li>
+                        </ul>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">Priority Actions:</div>
+                        <ul class="action-items">
+                            <li>Train warehouse leadership on CarlEx Growth Culture Principles</li>
+                            <li>Conduct Gemba Leadership Guideline self-assessments</li>
+                            <li>Establish structured Gemba Walk schedule aligned to PMS</li>
+                            <li>Focus Gemba Walks on strategic priorities and improvement opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benchmark Comparison Section -->
+        <div class="score-card">
+            <div class="score-header">
+                <div class="score-title">Warehouse Maturity Benchmark</div>
+                <div style="font-size: var(--font-size-lg); font-weight: 500; color: var(--color-text-secondary);">Kylemore (Ireland) vs Kastzalan (Poland)</div>
+            </div>
+            <p style="margin: 0 0 var(--space-16) 0; color: var(--color-text-secondary); font-size: var(--font-size-base);">
+                Comparison of maturity levels across CarlEx Foundations pillars with Kastzalan Brewery warehouse (Poland), achieving 55% CarlEx target for 2025.
+            </p>
+
+            <!-- Radial Chart Container -->
+            <div style="display: flex; justify-content: center; margin: var(--space-24) 0; background: var(--color-bg-1); padding: var(--space-24); border-radius: var(--radius-base);">
+                <svg width="500" height="500" viewBox="0 0 500 500" style="max-width: 100%; height: auto;">
+                    <!-- Define gradients -->
+                    <defs>
+                        <linearGradient id="kylmoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgba(192,21,47,0.3);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(192,21,47,0.1);stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="almatyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgba(33,128,141,0.3);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(33,128,141,0.1);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Background circles for scale (0-5) -->
+                    <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(94,82,64,0.15)" stroke-width="1"/>
+                    <circle cx="250" cy="250" r="160" fill="none" stroke="rgba(94,82,64,0.15)" stroke-width="1"/>
+                    <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(94,82,64,0.15)" stroke-width="1"/>
+                    <circle cx="250" cy="250" r="80" fill="none" stroke="rgba(94,82,64,0.15)" stroke-width="1"/>
+                    <circle cx="250" cy="250" r="40" fill="none" stroke="rgba(94,82,64,0.15)" stroke-width="1"/>
+
+                    <!-- Axis lines and labels for 5 dimensions -->
+                    <!-- Zone Management (0°) -->
+                    <line x1="250" y1="250" x2="250" y2="50" stroke="rgba(94,82,64,0.2)" stroke-width="1"/>
+                    <text x="250" y="25" text-anchor="middle" font-size="13" font-weight="600" fill="var(--color-slate-900)" dy="0.3em">Zone Mgmt</text>
+
+                    <!-- Workflow Standardization (72°) -->
+                    <line x1="250" y1="250" x2="425" y2="128" stroke="rgba(94,82,64,0.2)" stroke-width="1"/>
+                    <text x="445" y="120" text-anchor="start" font-size="13" font-weight="600" fill="var(--color-slate-900)">Workflow</text>
+
+                    <!-- Visual Management (144°) -->
+                    <line x1="250" y1="250" x2="425" y2="372" stroke="rgba(94,82,64,0.2)" stroke-width="1"/>
+                    <text x="445" y="380" text-anchor="start" font-size="13" font-weight="600" fill="var(--color-slate-900)">Visual Mgmt</text>
+
+                    <!-- Performance Management (216°) -->
+                    <line x1="250" y1="250" x2="75" y2="372" stroke="rgba(94,82,64,0.2)" stroke-width="1"/>
+                    <text x="45" y="380" text-anchor="end" font-size="13" font-weight="600" fill="var(--color-slate-900)">Performance</text>
+
+                    <!-- Organizational Management (288°) -->
+                    <line x1="250" y1="250" x2="75" y2="128" stroke="rgba(94,82,64,0.2)" stroke-width="1"/>
+                    <text x="45" y="120" text-anchor="end" font-size="13" font-weight="600" fill="var(--color-slate-900)">Organizational</text>
+
+                    <!-- Scale labels -->
+                    <text x="260" y="75" font-size="11" fill="rgba(98,108,113,0.6)">5</text>
+                    <text x="260" y="115" font-size="11" fill="rgba(98,108,113,0.6)">4</text>
+                    <text x="260" y="155" font-size="11" fill="rgba(98,108,113,0.6)">3</text>
+                    <text x="260" y="195" font-size="11" fill="rgba(98,108,113,0.6)">2</text>
+                    <text x="260" y="235" font-size="11" fill="rgba(98,108,113,0.6)">1</text>
+
+                    <!-- Kylemore polygon (1,0,0,0,0) -->
+                    <polygon points="250,210 250,210 250,210 250,210 250,210" 
+                        fill="url(#kylmoreGradient)" 
+                        stroke="rgba(192,21,47,1)" 
+                        stroke-width="2.5" 
+                        opacity="0.8"/>
+
+                    <!-- Kastzalan polygon (3,3,2,2,2) -->
+                    <polygon points="250,90 404,146 376,286 124,286 96,146" 
+                        fill="url(#almatyGradient)" 
+                        stroke="rgba(33,128,141,1)" 
+                        stroke-width="2.5" 
+                        opacity="0.8"/>
+
+                    <!-- Data points for Kylemore -->
+                    <circle cx="250" cy="210" r="4" fill="rgba(192,21,47,1)"/>
+
+                    <!-- Data points for Kastzalan -->
+                    <circle cx="250" cy="90" r="4" fill="rgba(33,128,141,1)"/>
+                    <circle cx="404" cy="146" r="4" fill="rgba(33,128,141,1)"/>
+                    <circle cx="376" cy="286" r="4" fill="rgba(33,128,141,1)"/>
+                    <circle cx="124" cy="286" r="4" fill="rgba(33,128,141,1)"/>
+                    <circle cx="96" cy="146" r="4" fill="rgba(33,128,141,1)"/>
+                </svg>
+            </div>
+
+            <!-- Benchmark Legend and Insights -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-16); margin: var(--space-24) 0;">
+                <div style="background: var(--color-bg-4); padding: var(--space-16); border-radius: var(--radius-base); border-left: 4px solid var(--color-red-500);">
+                    <div style="font-weight: 600; color: var(--color-text); margin-bottom: var(--space-8);">Kylemore Warehouse</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6;">
+                        <strong>Average Maturity: 0.2 / 5</strong> (Emerging)<br/>
+                        Current state indicates critical gaps across all CarlEx Foundations. Focus required on establishing baseline zone management standards before advancing to workflow and performance management.
+                    </div>
+                </div>
+
+                <div style="background: var(--color-bg-1); padding: var(--space-16); border-radius: var(--radius-base); border-left: 4px solid var(--color-primary);">
+                    <div style="font-weight: 600; color: var(--color-text); margin-bottom: var(--space-8);">Kastzalan Brewery Warehouse (Poland)</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6;">
+                        <strong>Average Maturity: 2.4 / 5</strong> (Developing)<br/>
+                        Target: 55% CarlEx Foundations achievement in 2025. Demonstrates strong zone management, workflow standardization, and visual management practices. Achievable benchmark for Kylemore warehouse.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gap Analysis -->
+            <div style="background: var(--color-surface); border: 1px solid var(--color-card-border); border-radius: var(--radius-base); padding: var(--space-16); margin-top: var(--space-20);">
+                <div style="font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-12);">Maturity Gap Analysis</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-12);">
+                    <div style="padding: var(--space-12); background: var(--color-bg-1); border-radius: var(--radius-sm);">
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Zone Management Gap</div>
+                        <div style="font-size: var(--font-size-lg); font-weight: 600; color: var(--color-primary); margin-top: var(--space-4);">+2.0 levels</div>
+                    </div>
+                    <div style="padding: var(--space-12); background: var(--color-bg-1); border-radius: var(--radius-sm);">
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Workflow Gap</div>
+                        <div style="font-size: var(--font-size-lg); font-weight: 600; color: var(--color-primary); margin-top: var(--space-4);">+3.0 levels</div>
+                    </div>
+                    <div style="padding: var(--space-12); background: var(--color-bg-1); border-radius: var(--radius-sm);">
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Visual Management Gap</div>
+                        <div style="font-size: var(--font-size-lg); font-weight: 600; color: var(--color-primary); margin-top: var(--space-4);">+2.0 levels</div>
+                    </div>
+                    <div style="padding: var(--space-12); background: var(--color-bg-1); border-radius: var(--radius-sm);">
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Performance Gap</div>
+                        <div style="font-size: var(--font-size-lg); font-weight: 600; color: var(--color-primary); margin-top: var(--space-4);">+2.0 levels</div>
+                    </div>
+                    <div style="padding: var(--space-12); background: var(--color-bg-1); border-radius: var(--radius-sm);">
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Organizational Gap</div>
+                        <div style="font-size: var(--font-size-lg); font-weight: 600; color: var(--color-primary); margin-top: var(--space-4);">+2.0 levels</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="score-card" style="margin-top: var(--space-24);">
+            <div class="score-title">Key Takeaways</div>
+            <div style="margin-top: var(--space-16);">
+                <p><strong>Current State:</strong> Warehouse department is at emerging level (3% overall maturity) across CarlEx Foundations, with particular gaps in zone management standardization, performance management system deployment, and organizational capability development.</p>
+                <p><strong>Top 3 Priority Areas:</strong></p>
+                <ol style="color: var(--color-text-secondary); line-height: 1.8;">
+                    <li><strong>Zone &amp; Workflow Standardization:</strong> Create warehouse zone map with ownership, standardize critical workflows, update and implement SOPs</li>
+                    <li><strong>Performance Management System:</strong> Deploy cascaded KPIs, establish structured PMS meetings, implement problem-solving discipline</li>
+                    <li><strong>Organizational Capability:</strong> Develop skill matrices, establish structured training, build leadership capabilities in CarlEx methodology</li>
+                </ol>
+                <p><strong>Next Steps:</strong> Develop detailed Tactical Implementation Plan (TIP) with assigned owners and timelines for each priority area.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
